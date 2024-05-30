@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jQuery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Task 1
+            $('a[href^="https://"]').attr('target', '_blank');
+
+            // Task 2
+            $('h2.head').css('background-color', 'green');
+            $('h2.head').find('.inner').css('font-size', '35px');
+
+            // Task 3
+            $('h3 + div').each(function(){
+                $(this).insertBefore($(this).prev('h3'));
+            });
+
+            // Task 4
+            var checkboxes = $('input[type="checkbox"]');
+            checkboxes.change(function(){
+                if(checkboxes.filter(':checked').length >= 3){
+                    checkboxes.attr('disabled', true);
+                }
+            });
+
+            // Task 8
+            let server = {
+                data: 0,
+                convertToString: (callback) => {
+                    callback(() => {
+                        return this.data + "";
+                    });
+                }
+            };
+            let client = {
+                server: server,
+                result: "",
+                calc: function (data) {
+                    this.server.data = data;
+                    this.server.convertToString(this.notification());
+                },
+                notification: () => {
+                    return (callback) => {
+                        this.result = callback();
+                    };
+                }
+            };
+            client.calc(123);
+            console.log(client.result);
+            console.log(typeof client.result);
+        });
+
+        // Task 7
+        function mul(...args) {
+            let numbers = args.filter(arg => typeof arg === 'number');
+            return numbers.reduce((accumulator, currentValue) => accumulator * currentValue, 1);
+        }
+
+        console.log(mul(1, "str", 2, 3, true)); // 6
+        console.log(mul(null, "str", false, true)); // 0
+
+        // Task 8
+        function mapBuilder(keysArray, valuesArray) {
+            if (keysArray.length !== valuesArray.length) {
+                throw new Error('Keys and values arrays must have the same length');
+        }
+
+        let map = new Map();
+
+        $.each(keysArray, function(index, key) {
+            map.set(key, valuesArray[index]);
+        });
+
+        return map;
+        }
+        let keys = [1, 2, 3, 4];
+        let values = ["div", "span", "b", "i"];
+        let map = mapBuilder(keys, values);
+
+        console.log(map.size); // 4
+        console.log(map.get(2)); // "span"
+
+    </script>
+</head>
+<body>
+    <h2 class="head">header1</h2>
+    <div>text1</div>
+    <h2 class="head">header2</h2>
+    <div>text2</div>
+    <a href="https://example.com">Example</a>
+    <input type="checkbox" name="checkbox1">
+    <input type="checkbox" name="checkbox2">
+    <input type="checkbox" name="checkbox3">
+    <input type="checkbox" name="checkbox4">
+    <input type="checkbox" name="checkbox5">
+    <input type="checkbox" name="checkbox6">
+</body>
+</html>
